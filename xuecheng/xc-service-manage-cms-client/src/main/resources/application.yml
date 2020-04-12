@@ -1,0 +1,21 @@
+server:
+  port: 31000
+spring:
+  application:
+    name: manage-cms-client-service
+  data:
+    mongodb:
+      database: xc_cms
+      uri: mongodb://root:1234@192.168.12.132:27017 # mongodb://用户名:密码@ip:端口
+  rabbitmq:
+    host: 192.168.12.130  # 主机
+    virtual-host: /xc     # 虚拟主机
+    username: xuecheng    # 用户名
+    password: 1234        # 密码
+    port: 5672            # 端口
+xuecheng:
+  mq:
+    portalRoutingKey: 5a751fab6abb5044e0d19ea1 # routingKey
+    courseRoutingKey: 5e834c817ec26d0a38f1fdb8 # 站点id
+    courseQueue: queue_cms_postpage_01  # 队列名称
+    portalQueue: queue_cms_postpage_02

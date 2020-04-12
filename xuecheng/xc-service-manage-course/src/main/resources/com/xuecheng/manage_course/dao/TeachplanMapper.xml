@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xuecheng.manage_course.dao.TeachplanMapper">
+
+
+    <resultMap id="teachplanNodeMap" type="com.xuecheng.framework.domain.course.ext.TeachplanNode">
+        <id column="a_id" property="id"></id>
+        <id column="a_pname" property="pname"></id>
+        <id column="a_parentid" property="parentid"></id>
+        <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.TeachplanNode">
+            <id column="b_id" property="id"></id>
+            <id column="b_pname" property="pname"></id>
+            <id column="b_parentid" property="parentid"></id>
+            <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.TeachplanNode">
+                <id column="c_id" property="id"></id>
+                <id column="c_pname" property="pname"></id>
+                <id column="c_parentid" property="parentid"></id>
+                <id column="media_id" property="mediaId"></id>
+                <id column="media_fileoriginalname" property="mediaFileOriginalname"></id>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="findList" resultMap="teachplanNodeMap" parameterType="string">
+        SELECT
+        t1.`id` a_id,
+        t1.`pname` a_pname,
+        t1.`parentid` a_parentid,
+
+        t2.`id` b_id,
+        t2.`pname` b_pname,
+        t2.`parentid` b_parentid,
+
+        t3.`id` c_id,
+        t3.`pname` c_pname,
+        t3.`parentid` c_parentid,
+
+        t.`media_id` ,
+        t.`media_fileoriginalname`
+        FROM
+        `teachplan` t1
+        LEFT JOIN `teachplan` t2
+        ON t2.`parentid` = t1.`id`
+        LEFT JOIN `teachplan` t3
+        ON t3.`parentid` = t2.`id`
+        LEFT JOIN `teachplan_media` t
+        on t.`teachplan_id` = t3.`id`
+        <where>
+            <if test="_parameter != null and _parameter != '' ">
+                t1.`courseid` = #{courseId}
+            </if>
+            AND t1.`parentid` = '0'
+        </where>
+    </select>
+
+    <select id="findByCourseIdAndParentId" resultType="com.xuecheng.framework.domain.course.Teachplan">
+        SELECT
+            *
+        FROM
+            `teachplan`
+        WHERE courseid = #{courseId}
+            AND parentid = #{parentId}
+    </select>
+
+    <insert id="addTeachPlan" parameterType="com.xuecheng.framework.domain.course.Teachplan">
+       INSERT INTO `teachplan` (
+          pname,
+          parentid,
+          grade,
+          ptype,
+          description,
+          timelength,
+          courseid,
+          orderby,
+          status,
+          trylearn
+          )
+       VALUES (
+        #{pname},
+        #{parentid},
+        #{grade},
+        #{ptype},
+        #{description},
+        #{timelength},
+        #{courseid},
+        #{orderby},
+        #{status},
+        #{trylearn}
+        )
+    </insert>
+
+    <select id="finById" parameterType="string" resultType="com.xuecheng.framework.domain.course.Teachplan">
+        select * from teachplan where id = #{id}
+    </select>
+
+</mapper>
+

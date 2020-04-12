@@ -1,0 +1,17 @@
+server:
+  port: 50102 # 服务端口  项目采用 50101 由于vmWare占用50101端口,改为50102
+spring:
+  application:
+    name: eureka-server  # 服务名称
+eureka:
+  client:
+    service-url: # Eureka客户端与Eureka服务端的交互地址
+      defaultZone: http://127.0.0.1:50102/eureka/ # 实现EurekaServer高可用,向对方EurekaServer互相注册即可
+    fetch-registry: true # 服务发现, 是否从EurekaServer中获取其他服务信息
+    register-with-eureka: true # 服务注册, 是否将当前服务注册到EurekaServer中
+  server:
+    enable-self-preservation: false # 是否开启自我保护
+    eviction-interval-timer-in-ms: 5000 # 服务注册表清理间隔时间, 单位为 ms
+  instance:
+    hostname: eureka-server1
+

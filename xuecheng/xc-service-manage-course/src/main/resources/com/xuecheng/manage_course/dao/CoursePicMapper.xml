@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xuecheng.manage_course.dao.CoursePicMapper">
+
+    <select id="findByCourseId" parameterType="string" resultType="com.xuecheng.framework.domain.course.CoursePic">
+        select * from course_pic where courseid = #{courseId}
+    </select>
+
+    <insert id="addPic">
+        insert into course_pic(courseid,pic) values(#{courseId},#{pic})
+    </insert>
+
+    <update id="deletePic">
+        delete from course_pic where courseid = #{courseId}
+    </update>
+
+</mapper>

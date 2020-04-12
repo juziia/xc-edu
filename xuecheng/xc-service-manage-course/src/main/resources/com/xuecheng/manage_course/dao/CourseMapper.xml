@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xuecheng.manage_course.dao.CourseMapper">
+    <select id="findCourseBaseById" parameterType="java.lang.String"
+            resultType="com.xuecheng.framework.domain.course.CourseBase">
+        select * from course_base where id = #{id}
+    </select>
+
+    <resultMap id="courseInfoMap" type="com.xuecheng.framework.domain.course.ext.CourseInfo">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="users" property="users"></result>
+        <result column="mt" property="mt"></result>
+        <result column="st" property="st"></result>
+        <result column="grade" property="grade"></result>
+        <result column="studymodel" property="studymodel"></result>
+        <result column="teachmode" property="teachmode"></result>
+        <result column="description" property="description"></result>
+        <result column="status" property="status"></result>
+        <result column="company_id" property="companyId"></result>
+        <result column="user_id" property="userId"></result>
+        <result column="pic" property="pic" ></result>
+    </resultMap>
+
+    <select id="selectList" parameterType="com.xuecheng.framework.domain.course.request.CourseListRequest" resultMap="courseInfoMap">
+        SELECT c1.* , c2.pic
+        FROM `course_base` c1
+        LEFT JOIN
+        `course_pic` c2
+        ON c1.`id` = c2.`courseid`
+        <where>
+            <if test="companyId != null and companyId != ''">
+                and company_id = #{companyId}
+            </if>
+        </where>
+    </select>
+
+    <select id="totalCount" resultType="long" parameterType="com.xuecheng.framework.domain.course.request.CourseListRequest">
+        select count(id) from course_base
+            <where>
+                <if test="companyId != null and companyId != ''">
+                    and company_id = #{companyId}
+                </if>
+            </where>
+    </select>
+</mapper>

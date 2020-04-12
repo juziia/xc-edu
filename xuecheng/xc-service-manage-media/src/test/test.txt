@@ -1,0 +1,24 @@
+#后台搜索（公开api）
+upstream search_server_pool{
+    server  127.0.0.1:40100  weight=10;
+}
+#后端搜索服务
+location   search_server_pool{
+proxy_pass  http://search_server_pool/search/;
+}
+
+
+#学成网用户中心
+server{
+listen  80;
+server_name  ucenter.xuecheng.com;
+#个人中心
+location / {
+    proxy_pass http://ucenter_server_pool;
+}
+}
+#前端ucenter
+upstream ucenter_server_pool{
+    #server127.0.0.1:7081 weight=10;
+    server 127.0.0.1:13000 weight=10;
+}
